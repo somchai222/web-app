@@ -3,85 +3,67 @@
 <hr>
 
 <h3>🔥 Top 5 คอนเสิร์ตขายดีที่สุด</h3>
-<div class="chart-box">
-    <canvas id="topChart"></canvas>
-</div>
-
+<table border="1" cellpadding="8" style="border-collapse: collapse; width: 100%; text-align: left;">
+    <tr>
+        <th>ชื่อคอนเสิร์ต</th>
+        <th>ยอดขาย (บาท)</th>
+    </tr>
+    <% topConcerts.forEach(c => { %>
+        <tr>
+            <td><%= c.name %></td>
+            <td><%= c.total.toLocaleString() %></td>
+        </tr>
+    <% }) %>
+</table>
 
 <hr>
 
 <h3>📈 รายได้รายเดือน</h3>
-<div class="chart-box">
-    <canvas id="monthlyChart"></canvas>
-</div>
+<table border="1" cellpadding="8" style="border-collapse: collapse; width: 100%; text-align: left;">
+    <tr>
+        <th>เดือน</th>
+        <th>รายได้ (บาท)</th>
+    </tr>
+    <% monthlySales.forEach(m => { %>
+        <tr>
+            <td><%= m.month %></td>
+            <td><%= m.total.toLocaleString() %></td>
+        </tr>
+    <% }) %>
+</table>
 
 <hr>
 
 <h3>⏰ ชั่วโมงที่มีการจองมากที่สุด</h3>
-<div class="chart-box">
-    <canvas id="hourChart"></canvas>
-</div>
+<table border="1" cellpadding="8" style="border-collapse: collapse; width: 100%; text-align: left;">
+    <tr>
+        <th>เวลา (ชั่วโมง)</th>
+        <th>จำนวนการจอง (ครั้ง)</th>
+    </tr>
+    <% peakHours.forEach(h => { %>
+        <tr>
+            <td><%= h.hour %>:00</td>
+            <td><%= h.total.toLocaleString() %></td>
+        </tr>
+    <% }) %>
+</table>
 
 <hr>
 
 <h3>🎟 Occupancy Rate</h3>
-
-<table border="1" cellpadding="8">
+<table border="1" cellpadding="8" style="border-collapse: collapse; width: 100%; text-align: left;">
     <tr>
         <th>คอนเสิร์ต</th>
-        <th>ขายแล้ว</th>
-        <th>ที่นั่งทั้งหมด</th>
+        <th>ขายแล้ว (ใบ)</th>
+        <th>ที่นั่งทั้งหมด (ใบ)</th>
         <th>% เต็ม</th>
     </tr>
     <% occupancy.forEach(o => { %>
         <tr>
             <td><%= o.name %></td>
-            <td><%= o.sold %></td>
-            <td><%= o.capacity %></td>
+            <td><%= o.sold.toLocaleString() %></td>
+            <td><%= o.capacity.toLocaleString() %></td>
             <td><%= o.occupancy_rate || 0 %>%</td>
         </tr>
     <% }) %>
 </table>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<script>
-
-// 🔥 Top 5
-new Chart(document.getElementById('topChart'), {
-    type: 'bar',
-    data: {
-        labels: <%- JSON.stringify(topConcerts.map(c => c.name)) %>,
-        datasets: [{
-            label: 'ยอดขาย (บาท)',
-            data: <%- JSON.stringify(topConcerts.map(c => c.total)) %>
-        }]
-    }
-});
-
-// 📈 Monthly
-new Chart(document.getElementById('monthlyChart'), {
-    type: 'line',
-    data: {
-        labels: <%- JSON.stringify(monthlySales.map(m => m.month)) %>,
-        datasets: [{
-            label: 'รายได้รายเดือน',
-            data: <%- JSON.stringify(monthlySales.map(m => m.total)) %>,
-            tension: 0.3
-        }]
-    }
-});
-
-// ⏰ Hourly
-new Chart(document.getElementById('hourChart'), {
-    type: 'line',
-    data: {
-        labels: <%- JSON.stringify(peakHours.map(h => h.hour + ":00")) %>,
-        datasets: [{
-            label: 'จำนวนการจอง',
-            data: <%- JSON.stringify(peakHours.map(h => h.total)) %>
-        }]
-    }
-});
-
-</script>

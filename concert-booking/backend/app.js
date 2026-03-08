@@ -1083,8 +1083,9 @@ app.get('/admin/reports', isAdmin, (req, res) => {
         }
     }
 
+    // ✅ เปลี่ยนมากรองจาก s.show_date (วันที่แสดง) แทน b.booking_date 
     if (start && end) {
-        where.push("b.booking_date >= ? AND b.booking_date < date(?, '+1 day')");
+        where.push("s.show_date >= ? AND s.show_date <= ?");
         params.push(start, end);
     }
 
@@ -1126,8 +1127,9 @@ app.get('/admin/reports', isAdmin, (req, res) => {
         FROM seats st
         JOIN showtimes s ON st.showtime_id = s.id
         JOIN concerts c ON s.concert_id = c.id
-        ${whereClause.replace("b.booking_date", "s.show_date")}
-    `;
+        ${whereClause} 
+    `; 
+    // ✅ เอา .replace() ออกไปแล้ว ใช้ ${whereClause} ตรงๆ ได้เลย!
 
     db.get(summarySql, params, (err, summary) => {
 
@@ -1186,7 +1188,6 @@ app.get('/admin/reports', isAdmin, (req, res) => {
         });
     });
 });
-
 
 // ======================
 // USER API (สำหรับ Frontend พอร์ต 3001)
